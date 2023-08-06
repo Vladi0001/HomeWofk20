@@ -1,21 +1,30 @@
-package Service.Mech;
+package homework20.homework20.Service.impl;
 
+import homework20.homework20.Service.EmployeeService;
+import homework20.homework20.Service.EmployeeValidationServece;
 import homework20.homework20.homework.Employee;
 import homework20.homework20.Exception.EmployeeAlreadyAddedException;
 import homework20.homework20.Exception.EmployeeNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-
-public class EmployeeService implements Service.EmployeeService {
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
     private final List<Employee>employees;
+    private final EmployeeValidationServece validationServece;
 
-    public EmployeeService(List<Employee> employees) {
+    public EmployeeServiceImpl(List<Employee> employees, EmployeeValidationServece validationServece) {
+
         this.employees = employees;
+
+        this.validationServece = validationServece;
     }
 
     @Override
     public Employee add(String lastName, String firstName) {
+        validationServece.validate(firstName,lastName);
         Employee employee = new Employee( firstName, lastName);
         if (employees.contains(employee)){
             throw new EmployeeAlreadyAddedException();
@@ -23,6 +32,7 @@ public class EmployeeService implements Service.EmployeeService {
         employees.add(employee);
         return employee;
     }
+
 
     @Override
     public Employee remove(String lastName, String firstName) {
@@ -45,6 +55,6 @@ public class EmployeeService implements Service.EmployeeService {
 
     @Override
     public Collection<Employee> findAll() {
-        return employees;
+        return Collections.unmodifiableList(employees);
     }
 }
