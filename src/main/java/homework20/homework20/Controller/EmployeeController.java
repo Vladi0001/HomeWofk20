@@ -1,6 +1,6 @@
 package homework20.homework20.Controller;
 
-import Service.Mech.EmployeeService;
+import homework20.homework20.Service.Mech.EmployeeServiceImpl;
 import homework20.homework20.homework.Employee;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,15 +13,20 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
-    private final EmployeeService employeeService;
+    private final EmployeeServiceImpl employeeService;
 
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeServiceImpl employeeService) {
         this.employeeService = employeeService;
     }
 
+    @GetMapping("/hallo")
+    public String hallo() {
+        return "Привет!";
+    }
     @GetMapping("/add")
     public ResponseEntity<Employee> add(@RequestParam String lastName, String firstName) {
         Employee employee = employeeService.add(lastName, firstName);
+
         return ResponseEntity.ok(employee);
     }
 
